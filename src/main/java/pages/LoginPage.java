@@ -33,6 +33,10 @@ public class LoginPage extends BasePage{
     @FindBy(xpath = "//div[@class='login_login__3EHKB']/div")
     WebElement errorMessageLogin;
 
+
+
+
+
     public LoginPage typeLoginForm (String email, String password){
         //inputEmail.clear();
         inputEmail.sendKeys(email);
@@ -51,6 +55,8 @@ public class LoginPage extends BasePage{
         return new ContactPage(driver);
     }
 
+
+
     public LoginPage clickBtnLoginNegative() {
         btnLoginSubmit.click();
         return this;
@@ -68,4 +74,18 @@ public class LoginPage extends BasePage{
         return  isElementPresent(errorMessageLogin, "Login Failed with code 401");
     }
 
+
+
+
+    public LoginPage clickBtnRegistrationNegative() {
+        btnRegistration.click();
+        return this;
+    }
+    public ContactPage closeAlert_wrongRegistration() {
+        pause(3);
+        Alert alert = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent());
+        System.out.println(alert.getText());
+        alert.accept();
+        return new ContactPage(driver);
+    }
 }

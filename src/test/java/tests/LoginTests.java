@@ -15,13 +15,17 @@ public class LoginTests extends ApplicationManager {
         }
 
         @Test
-        public void loginNegativeTest_wrongPassword(){
-           Assert.assertTrue(new HomePage(getDriver()).clickBtnLoginHeader()
+        public void loginNegativeTest_wrongPassword() {
+            Assert.assertTrue(new HomePage(getDriver()).clickBtnLoginHeader()
                     .typeLoginForm("qa_mail@mail.com", "Qwerty123!!!")
                     .clickBtnLoginNegative().closeAlert().isTextInElementPresent_errorMessage());
+        }
 
-
-
+            @Test
+            public void loginNegativeTest_wrongEmail(){
+                new HomePage(getDriver()).clickBtnLoginHeader()
+                        .typeLoginForm("qa_mail@mailcom", "Qwerty123!!!")
+                        .clickBtnLoginNegative().closeAlert().isTextInElementPresent_errorMessage();
 
 
         //Assert.assertEquals(100,200);

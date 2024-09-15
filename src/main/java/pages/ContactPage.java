@@ -25,6 +25,11 @@ public class ContactPage extends BasePage{
         return btnContact.isDisplayed();
     }
 
+    @FindBy(xpath = "//div[@class='login_login__3EHKB']/div")
+    WebElement errorMessageRegistration;
 
+    public boolean isTextInElementPresent_errorMessage_reg(){
+        return isElementPresent(errorMessageRegistration, "Registration failed with code 400");
+    }
 
 }
