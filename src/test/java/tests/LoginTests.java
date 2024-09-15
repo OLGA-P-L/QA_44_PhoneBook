@@ -8,7 +8,18 @@ import pages.HomePage;
 public class LoginTests extends ApplicationManager {
     @Test
     public void loginPositiveTest(){
-        Assert.assertTrue(new HomePage(getDriver()).clickBtnLoginHeader().typeLoginForm("qa_mail@mail.com", "Qwerty123!").clickBtnLoginPositive().isElementContactPresent());
+        boolean result = new HomePage(getDriver()).clickBtnLoginHeader()
+                .typeLoginForm("qa_mail@mail.com", "Qwerty123!")
+                .clickBtnLoginPositive().isElementContactPresent();
+        Assert.assertTrue(result);
+        }
+
+        @Test
+        public void loginNegativeTest_wrongPassword(){
+           Assert.assertTrue(new HomePage(getDriver()).clickBtnLoginHeader()
+                    .typeLoginForm("qa_mail@mail.com", "Qwerty123!!!")
+                    .clickBtnLoginNegative().closeAlert().isTextInElementPresent_errorMessage());
+
 
 
 
