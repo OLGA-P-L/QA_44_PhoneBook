@@ -5,8 +5,15 @@ public enum HeaderMenuItem {
 
     ABOUT("//a[@href='/about']"),
 
-    LOGIN("//a[@href='/login']");
+    LOGIN("//a[@href='/login']"),
+
+    CONTACTS("//a[@href='/login']"),
+
+    ADD ("//a[@href='/add']");
+
+
     private final String locator;
+
 
     HeaderMenuItem(String locator){
         this.locator = locator;

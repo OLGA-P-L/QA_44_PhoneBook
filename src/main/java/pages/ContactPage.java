@@ -21,6 +21,9 @@ public class ContactPage extends BasePage{
     @FindBy(xpath = "//a[text()='CONTACTS']")
     WebElement btnContact;
 
+    @FindBy(xpath = "//div[@class='contact-page_leftdiv__yhyke']//div[@class='contact-item_card__2SOIM'][last()]/h3")
+    WebElement lastPhoneInList;
+
     public boolean isElementContactPresent(){
         return btnContact.isDisplayed();
     }
@@ -32,4 +35,7 @@ public class ContactPage extends BasePage{
         return isElementPresent(errorMessageRegistration, "Registration failed with code 400");
     }
 
+    public boolean isLastPhoneEquals(String phone){
+        return lastPhoneInList.getText().equals(phone);
+    }
 }

@@ -8,7 +8,6 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.HeaderMenuItem;
 
-import static utils.RundomUtils.generateEmail;
 import static utils.RundomUtils.generateString;
 import static pages.BasePage.clickButtonsOnHeader;
 
