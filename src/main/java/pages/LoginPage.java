@@ -1,5 +1,6 @@
 package pages;
 
+import dto.UserDto;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,13 +12,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class LoginPage extends BasePage{
+public class LoginPage extends BasePage {
 
-    public LoginPage(WebDriver driver){
+    public LoginPage(WebDriver driver) {
         setDriver(driver);
-               PageFactory.initElements(new AjaxElementLocatorFactory(driver,10), this);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
 
     }
+
     @FindBy(xpath = "//input[@name='email']")
     WebElement inputEmail;
 
@@ -34,10 +36,7 @@ public class LoginPage extends BasePage{
     WebElement errorMessageLogin;
 
 
-
-
-
-    public LoginPage typeLoginForm (String email, String password){
+    public LoginPage typeLoginForm(String email, String password) {
         //inputEmail.clear();
         inputEmail.sendKeys(email);
         //inputPassword.clear();
@@ -45,16 +44,23 @@ public class LoginPage extends BasePage{
         return this;
     }
 
-    public ContactPage clickBtnLoginPositive(){
+    public LoginPage typeLoginForm(UserDto user) {
+        //inputEmail.clear();
+        inputEmail.sendKeys(user.getEmail());
+        //inputPassword.clear();
+        inputPassword.sendKeys(user.getPassword());
+        return this;
+    }
+
+    public ContactPage clickBtnLoginPositive() {
         btnLoginSubmit.click();
         return new ContactPage(driver);
     }
 
-    public ContactPage clickBtnRegistrationPositive(){
+    public ContactPage clickBtnRegistrationPositive() {
         btnRegistration.click();
         return new ContactPage(driver);
     }
-
 
 
     public LoginPage clickBtnLoginNegative() {
@@ -70,17 +76,20 @@ public class LoginPage extends BasePage{
         return new LoginPage(driver);
     }
 
-    public boolean isTextInElementPresent_errorMessage(){
-        return  isElementPresent(errorMessageLogin, "Login Failed with code 401");
+    public boolean isTextInElementPresent_errorMessage() {
+        return isElementPresent(errorMessageLogin, "Login Failed with code 401");
     }
 
-
+    public boolean isTextInElementPresent_errorMessage(String text) {
+        return isElementPresent(errorMessageLogin, text);
+    }
 
 
     public LoginPage clickBtnRegistrationNegative() {
         btnRegistration.click();
         return this;
     }
+
     public ContactPage closeAlert_wrongRegistration() {
         pause(3);
         Alert alert = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent());
@@ -88,4 +97,6 @@ public class LoginPage extends BasePage{
         alert.accept();
         return new ContactPage(driver);
     }
+
+
 }
