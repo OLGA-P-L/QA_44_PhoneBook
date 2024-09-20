@@ -44,4 +44,20 @@ ContactPage contactPage = new ContactPage(getDriver());
 
 
     }
+    @Test
+    public void addNewContactNegativeTest_nameIsNull(){
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name(generateString(0))
+                .lastName(generateString(10))
+                .phone(generatePhone(10))
+                .email(generateEmail(12))
+                .address(generateString(20))
+                .description(generateString(10))
+                .build();
+        ContactPage contactPage = new ContactPage(getDriver());
+        addPage.fillContactForm(contact);
+        addPage.clickBtnSaveContactNegative(HeaderMenuItem.SAVE);
+
+    }
+
 }

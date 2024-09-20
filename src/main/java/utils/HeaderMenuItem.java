@@ -9,7 +9,11 @@ public enum HeaderMenuItem {
 
     CONTACTS("//a[@href='/login']"),
 
-    ADD ("//a[@href='/add']");
+    ADD ("//a[@href='/add']"),
+
+    SIGNOUT ("//button[text()='Sign out']"),
+
+    SAVE ("//button/b");
 
 
     private final String locator;
