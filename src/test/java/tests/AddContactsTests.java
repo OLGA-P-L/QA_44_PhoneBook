@@ -60,4 +60,10 @@ ContactPage contactPage = new ContactPage(getDriver());
 
     }
 
+    @Test
+    public void addNewContactNegativeTest_wrongPhoneFormat(){
+
+
+    }
+
 }
