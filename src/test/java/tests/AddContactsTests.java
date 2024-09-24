@@ -1,34 +1,47 @@
 package tests;
 
+import data_provider.DPAddContact;
 import dto.ContactDtoLombok;
 import dto.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import manager.ApplicationManager;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.AddPage;
 import pages.ContactPage;
 import pages.HomePage;
 import pages.LoginPage;
 import utils.HeaderMenuItem;
+import utils.TestNGListener;
+
+
+
+
+import java.lang.reflect.Method;
 
 import static pages.BasePage.clickButtonsOnHeader1;
 import static java.util.Random.*;
 import static utils.RundomUtils.*;
+@Listeners(TestNGListener.class)
 
+@Slf4j
 public class AddContactsTests extends ApplicationManager {
     UserDto user = new UserDto("qa_mail@mail.com", "Qwerty123!");
     AddPage addPage;
     @BeforeMethod
     public void login(){
-        HomePage homePage = new HomePage(getDriver());
+        logger.info("Start method ---> login" + "user: qa_mail@mail.com");
+        new HomePage(getDriver());
         LoginPage loginPage =
         clickButtonsOnHeader1(HeaderMenuItem.LOGIN);
-        ContactPage contactPage = loginPage.typeLoginForm(user).clickBtnLoginPositive();
+        loginPage.typeLoginForm(user).clickBtnLoginPositive();
         addPage = clickButtonsOnHeader1(HeaderMenuItem.ADD);
 
     }
     @Test
-    public void addNewContactPositiveTest(){
+    public void addNewContactPositiveTest(Method method){
         ContactDtoLombok contact = ContactDtoLombok.builder()
                 .name(generateString(5))
                 .lastName(generateString(10))
@@ -37,14 +50,15 @@ public class AddContactsTests extends ApplicationManager {
                 .address(generateString(20))
                 .description(generateString(10))
                 .build();
-ContactPage contactPage = new ContactPage(getDriver());
-        addPage.fillContactForm(contact);
-        addPage.clickBtnSaveContactPositive();
-        contactPage.isLastPhoneEquals(contact.getPhone());
+
+        logger.info("Start ---> "+method.getName()+"with data: "+contact.toString());
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .isLastPhoneEquals(contact.getPhone()));
 
 
     }
-    @Test
+    /*@Test
     public void addNewContactNegativeTest_nameIsNull(){
         ContactDtoLombok contact = ContactDtoLombok.builder()
                 .name(generateString(0))
@@ -57,11 +71,50 @@ ContactPage contactPage = new ContactPage(getDriver());
         ContactPage contactPage = new ContactPage(getDriver());
         addPage.fillContactForm(contact);
         addPage.clickBtnSaveContactNegative(HeaderMenuItem.SAVE);
+        Assert.assertTrue(addPage.isTextInTheElementPresent_nameIsNull());
+
+    }*/
+
+    @Test
+    public void addNewContactNegativeTest_nameIsEmpty(){
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name("")
+                .lastName(generateString(10))
+                .phone(generatePhone(10))
+                .email(generateEmail(12))
+                .address(generateString(20))
+                .description(generateString(10))
+                .build();
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .urlContainsAdd());
+
+
 
     }
 
     @Test
-    public void addNewContactNegativeTest_wrongPhoneFormat(){
+    public void addNewContactNegativeTest_wrongEmail() {
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name(generateString(4))
+                .lastName(generateString(10))
+                .phone(generatePhone(10))
+                .email(generateString(12))
+                .address(generateString(20))
+                .description(generateString(10))
+                .build();
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .isAlertPresent(5));
+    }
+
+    @Test(dataProvider = "DPAddContact", dataProviderClass = DPAddContact.class)
+    public void addNewContactNegativeTest_wrongEmailDP(ContactDtoLombok contact) {
+        System.out.println("--->" + contact);
+        Assert.assertTrue(addPage.fillContactForm(contact)
+                .clickBtnSaveContactPositive()
+                .isAlertPresent(5))
+        ;
 
 
     }

@@ -40,32 +40,32 @@ public class AddPage extends BasePage{
     WebElement inputDescription;
 
     @FindBy(xpath = "//button/b")
-    static WebElement btnSaveContact;
+    WebElement btnSaveContact;
 
 
-    public void fillContactForm(ContactDtoLombok contact) {
+    public AddPage fillContactForm(ContactDtoLombok contact) {
         inputName.sendKeys(contact.getName());
         inputLastName.sendKeys(contact.getLastName());
         inputPhone.sendKeys(contact.getPhone());
       inputEmail.sendKeys(contact.getEmail());
       inputAddress.sendKeys(contact.getAddress());
       inputDescription.sendKeys(contact.getDescription());
+      return this;
     }
 
-    public void clickBtnSaveContactPositive(){
+    public ContactPage clickBtnSaveContactPositive(){
         btnSaveContact.click();
+        return new ContactPage(driver);
     }
 
     public void clickBtnSaveContactNegative(HeaderMenuItem headerMenuItem){
-        try {
+
             WebElement element = new WebDriverWait(driver, Duration.ofSeconds(2))
                     .until(ExpectedConditions.elementToBeClickable(By.xpath("//button/b")));
             btnSaveContact.click();
-        } catch (TimeoutException exception) {
-            exception.printStackTrace();
-            System.out.println("created exception");
-        }
+       }
 
+    public boolean isTextInTheElementPresent_nameIsNull() {
+        return isElementPresent(btnSaveContact, "Save");
     }
-
 }
