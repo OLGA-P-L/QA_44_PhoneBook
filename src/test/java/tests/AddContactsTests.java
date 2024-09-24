@@ -1,8 +1,11 @@
 package tests;
 
+import data_provider.DPAddContact;
 import dto.ContactDtoLombok;
 import dto.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import manager.ApplicationManager;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AddPage;
@@ -11,19 +14,21 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.HeaderMenuItem;
 
+
 import static pages.BasePage.clickButtonsOnHeader1;
 import static java.util.Random.*;
 import static utils.RundomUtils.*;
 
+@Slf4j
 public class AddContactsTests extends ApplicationManager {
     UserDto user = new UserDto("qa_mail@mail.com", "Qwerty123!");
     AddPage addPage;
     @BeforeMethod
     public void login(){
-        HomePage homePage = new HomePage(getDriver());
+        new HomePage(getDriver());
         LoginPage loginPage =
         clickButtonsOnHeader1(HeaderMenuItem.LOGIN);
-        ContactPage contactPage = loginPage.typeLoginForm(user).clickBtnLoginPositive();
+        loginPage.typeLoginForm(user).clickBtnLoginPositive();
         addPage = clickButtonsOnHeader1(HeaderMenuItem.ADD);
 
     }
@@ -37,14 +42,13 @@ public class AddContactsTests extends ApplicationManager {
                 .address(generateString(20))
                 .description(generateString(10))
                 .build();
-ContactPage contactPage = new ContactPage(getDriver());
-        addPage.fillContactForm(contact);
-        addPage.clickBtnSaveContactPositive();
-        contactPage.isLastPhoneEquals(contact.getPhone());
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .isLastPhoneEquals(contact.getPhone()));
 
 
     }
-    @Test
+    /*@Test
     public void addNewContactNegativeTest_nameIsNull(){
         ContactDtoLombok contact = ContactDtoLombok.builder()
                 .name(generateString(0))
@@ -57,11 +61,50 @@ ContactPage contactPage = new ContactPage(getDriver());
         ContactPage contactPage = new ContactPage(getDriver());
         addPage.fillContactForm(contact);
         addPage.clickBtnSaveContactNegative(HeaderMenuItem.SAVE);
+        Assert.assertTrue(addPage.isTextInTheElementPresent_nameIsNull());
+
+    }*/
+
+    @Test
+    public void addNewContactNegativeTest_nameIsEmpty(){
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name("")
+                .lastName(generateString(10))
+                .phone(generatePhone(10))
+                .email(generateEmail(12))
+                .address(generateString(20))
+                .description(generateString(10))
+                .build();
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .urlContainsAdd());
+
+
 
     }
 
     @Test
-    public void addNewContactNegativeTest_wrongPhoneFormat(){
+    public void addNewContactNegativeTest_wrongEmail() {
+        ContactDtoLombok contact = ContactDtoLombok.builder()
+                .name(generateString(4))
+                .lastName(generateString(10))
+                .phone(generatePhone(10))
+                .email(generateString(12))
+                .address(generateString(20))
+                .description(generateString(10))
+                .build();
+
+        Assert.assertTrue(addPage.fillContactForm(contact).clickBtnSaveContactPositive()
+                .isAlertPresent(5));
+    }
+
+    @Test(dataProvider = "DPAddContact", dataProviderClass = DPAddContact.class)
+    public void addNewContactNegativeTest_wrongEmailDP(ContactDtoLombok contact) {
+        System.out.println("--->" + contact);
+        Assert.assertTrue(addPage.fillContactForm(contact)
+                .clickBtnSaveContactPositive()
+                .isAlertPresent(5))
+        ;
 
 
     }
