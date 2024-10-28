@@ -36,12 +36,12 @@ public class EditContactsTests extends ApplicationManager {
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void editContactPositiveTest(){
         ContactDtoLombok newContact = ContactDtoLombok.builder()
-                .name("new - "+generateString(5))
-                .lastName("new - "+generateString(10))
+                .name("new-"+generateString(5))
+                .lastName("new-"+generateString(10))
                 .phone("000"+generatePhone(7))
-                .email("new - "+generateEmail(12))
-                .address("new - "+generateString(20))
-                .description("new - "+generateString(10))
+                .email("new-"+generateEmail(12))
+                .address("new-"+generateString(20))
+                .description("new-"+generateString(10))
                 .build();
         contactPage.clickFirstElementOfContactsList();
         contactPage.fillEditeForm(newContact);
